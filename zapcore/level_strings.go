@@ -37,11 +37,17 @@ var (
 		FatalLevel:  coloring.FGRed,
 	}
 
-	levelToLowercaseColorString = make(map[Level]string, len(levelToColor))
-	levelToCapitalColorString   = make(map[Level]string, len(levelToColor))
+	levelToLowercaseString      = make(map[Level]string, len(AllLevels))
+	levelToCapitalString        = make(map[Level]string, len(AllLevels))
+	levelToLowercaseColorString = make(map[Level]string, len(AllLevels))
+	levelToCapitalColorString   = make(map[Level]string, len(AllLevels))
 )
 
 func init() {
+	for _, level := range AllLevels {
+		levelToLowercaseString[level] = level.String()
+		levelToCapitalString[level] = strings.ToUpper(level.String())
+	}
 	for level, color := range levelToColor {
 		levelToLowercaseColorString[level] = color.Add(level.String())
 		levelToCapitalColorString[level] = color.Add(strings.ToUpper(level.String()))

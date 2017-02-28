@@ -21,7 +21,6 @@
 package zapcore
 
 import (
-	"strings"
 	"time"
 
 	"go.uber.org/zap/buffer"
@@ -33,7 +32,7 @@ type LevelEncoder func(Level, PrimitiveArrayEncoder)
 // LowercaseLevelEncoder serializes a Level to a lowercase string. For example,
 // InfoLevel is serialized to "info".
 func LowercaseLevelEncoder(l Level, enc PrimitiveArrayEncoder) {
-	enc.AppendString(l.String())
+	enc.AppendString(levelToLowercaseString[l])
 }
 
 // LowercaseColorLevelEncoder serializes a Level to a lowercase string and adds coloring.
@@ -45,7 +44,7 @@ func LowercaseColorLevelEncoder(l Level, enc PrimitiveArrayEncoder) {
 // CapitalLevelEncoder serializes a Level to an all-caps string. For example,
 // InfoLevel is serialized to "INFO".
 func CapitalLevelEncoder(l Level, enc PrimitiveArrayEncoder) {
-	enc.AppendString(strings.ToUpper(l.String()))
+	enc.AppendString(levelToCapitalString[l])
 }
 
 // CapitalColorLevelEncoder serializes a Level to an all-caps string and adds color.
