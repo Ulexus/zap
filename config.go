@@ -129,7 +129,7 @@ func NewDevelopmentConfig() Config {
 			CallerKey:      "C",
 			MessageKey:     "M",
 			StacktraceKey:  "S",
-			EncodeLevel:    zapcore.ColoredCapitalLevelEncoder,
+			EncodeLevel:    zapcore.CapitalLevelEncoder,
 			EncodeTime:     zapcore.ISO8601TimeEncoder,
 			EncodeDuration: zapcore.StringDurationEncoder,
 		},
