@@ -25,8 +25,6 @@ import (
 	"os"
 	"testing"
 
-	"go.uber.org/zap/zapcore"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -49,9 +47,9 @@ func TestConfig(t *testing.T) {
 			desc:    "development",
 			cfg:     NewDevelopmentConfig(),
 			expectN: 3 + 200, // 3 initial logs, all 200 subsequent logs
-			expectRe: "debug\t.*go.uber.org/zap/config_test.go:" + `\d+` + "\tdebug\t" + `{"k": "v", "z": "zz"}` + "\n" +
-				"info\t.*go.uber.org/zap/config_test.go:" + `\d+` + "\tinfo\t" + `{"k": "v", "z": "zz"}` + "\n" +
-				"warn\t.*go.uber.org/zap/config_test.go:" + `\d+` + "\twarn\t" + `{"k": "v", "z": "zz"}` + "\n" +
+			expectRe: "DEBUG\t.*go.uber.org/zap/config_test.go:" + `\d+` + "\tdebug\t" + `{"k": "v", "z": "zz"}` + "\n" +
+				"INFO\t.*go.uber.org/zap/config_test.go:" + `\d+` + "\tinfo\t" + `{"k": "v", "z": "zz"}` + "\n" +
+				"WARN\t.*go.uber.org/zap/config_test.go:" + `\d+` + "\twarn\t" + `{"k": "v", "z": "zz"}` + "\n" +
 				`goroutine \d+ \[running\]:`,
 		},
 	}
@@ -63,8 +61,7 @@ func TestConfig(t *testing.T) {
 			defer os.Remove(temp.Name())
 
 			tt.cfg.OutputPaths = []string{temp.Name()}
-			tt.cfg.EncoderConfig.TimeKey = ""                                // no timestamps in tests
-			tt.cfg.EncoderConfig.EncodeLevel = zapcore.LowercaseLevelEncoder // no tty in tests
+			tt.cfg.EncoderConfig.TimeKey = "" // no timestamps in tests
 			tt.cfg.InitialFields = map[string]interface{}{"z": "zz", "k": "v"}
 
 			hook, count := makeCountingHook()
