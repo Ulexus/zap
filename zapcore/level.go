@@ -54,6 +54,19 @@ const (
 	_maxLevel = FatalLevel
 )
 
+var (
+	// AllLevels is an ordered slice of all Levels.
+	AllLevels = []Level{
+		DebugLevel,
+		InfoLevel,
+		WarnLevel,
+		ErrorLevel,
+		DPanicLevel,
+		PanicLevel,
+		FatalLevel,
+	}
+)
+
 // String returns a lower-case ASCII representation of the log level.
 func (l Level) String() string {
 	switch l {

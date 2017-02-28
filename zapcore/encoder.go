@@ -21,39 +21,11 @@
 package zapcore
 
 import (
-	"fmt"
 	"strings"
 	"time"
 
 	"go.uber.org/zap/buffer"
 )
-
-const (
-	fgBlack colorCode = iota + 30
-	fgRed
-	fgGreen
-	fgYellow
-	fgBlue
-	fgMagenta
-	fgCyan
-	fgWhite
-)
-
-type colorCode int
-
-var (
-	levelToColorCode = map[Level]colorCode{
-		DebugLevel:  fgMagenta,
-		InfoLevel:   fgBlue,
-		WarnLevel:   fgYellow,
-		ErrorLevel:  fgRed,
-		DPanicLevel: fgRed,
-		PanicLevel:  fgRed,
-		FatalLevel:  fgRed,
-	}
-)
-
-// TODO(pedge): we can probably just cache the level strings
 
 // A LevelEncoder serializes a Level to a primitive type.
 type LevelEncoder func(Level, PrimitiveArrayEncoder)
@@ -64,10 +36,10 @@ func LowercaseLevelEncoder(l Level, enc PrimitiveArrayEncoder) {
 	enc.AppendString(l.String())
 }
 
-// ColoredLowercaseLevelEncoder serializes a Level to a lowercase string and adds coloring.
+// LowercaseColorLevelEncoder serializes a Level to a lowercase string and adds coloring.
 // For example, InfoLevel is serialized to "info".
-func ColoredLowercaseLevelEncoder(l Level, enc PrimitiveArrayEncoder) {
-	encodeWithColor(l, enc, l.String())
+func LowercaseColorLevelEncoder(l Level, enc PrimitiveArrayEncoder) {
+	enc.AppendString(levelToLowercaseColorString[l])
 }
 
 // CapitalLevelEncoder serializes a Level to an all-caps string. For example,
@@ -76,33 +48,24 @@ func CapitalLevelEncoder(l Level, enc PrimitiveArrayEncoder) {
 	enc.AppendString(strings.ToUpper(l.String()))
 }
 
-// ColoredCapitalLevelEncoder serializes a Level to an all-caps string and adds color.
+// CapitalColorLevelEncoder serializes a Level to an all-caps string and adds color.
 // For example, InfoLevel is serialized to "INFO".
-func ColoredCapitalLevelEncoder(l Level, enc PrimitiveArrayEncoder) {
-	encodeWithColor(l, enc, strings.ToUpper(l.String()))
-}
-
-func encodeWithColor(l Level, enc PrimitiveArrayEncoder, s string) {
-	colorCode, ok := levelToColorCode[l]
-	if !ok {
-		enc.AppendString(s)
-		return
-	}
-	enc.AppendString(fmt.Sprintf("\x1b[%dm%s\x1b[0m", colorCode, s))
+func CapitalColorLevelEncoder(l Level, enc PrimitiveArrayEncoder) {
+	enc.AppendString(levelToCapitalColorString[l])
 }
 
 // UnmarshalText unmarshals text to a LevelEncoder. "capital" is unmarshaled to
-// CapitalLevelEncoder, "coloredCapital" is unmarshaled to ColoredCapitalLevelEncoder,
-// "colored" is unmarshaled to ColoredLowercaseLevelEncoder, and anything else
+// CapitalLevelEncoder, "coloredCapital" is unmarshaled to CapitalColorLevelEncoder,
+// "colored" is unmarshaled to LowercaseColorLevelEncoder, and anything else
 // is unmarshaled to LowercaseLevelEncoder.
 func (e *LevelEncoder) UnmarshalText(text []byte) error {
 	switch string(text) {
 	case "capital":
 		*e = CapitalLevelEncoder
-	case "coloredCapital":
-		*e = ColoredCapitalLevelEncoder
-	case "colored":
-		*e = ColoredLowercaseLevelEncoder
+	case "capitalColor":
+		*e = CapitalColorLevelEncoder
+	case "color":
+		*e = LowercaseColorLevelEncoder
 	default:
 		*e = LowercaseLevelEncoder
 	}
