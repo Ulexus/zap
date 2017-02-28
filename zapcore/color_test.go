@@ -28,6 +28,8 @@ import (
 
 func TestAllLevelsCoveredByAColor(t *testing.T) {
 	for _, level := range AllLevels {
-		assert.NotNil(t, levelToColor[level], "Level %v not covered by a color in levelToColor", level)
+		assert.NotEmpty(t, levelToColor[level], "Level %v not covered by a color in levelToColor", level)
+		assert.NotEmpty(t, levelToLowercaseColorString[level], "Level %v not covered by a color in levelToLowercaseColorString", level)
+		assert.NotEmpty(t, levelToCapitalColorString[level], "Level %v not covered by a color in levelToCapitalColorString", level)
 	}
 }
