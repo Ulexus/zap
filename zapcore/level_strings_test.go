@@ -26,13 +26,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAllLevelsCoveredByAColor(t *testing.T) {
+func TestAllLevelsCoveredByLevelString(t *testing.T) {
 	assert.Equal(t, len(levelToColor), len(AllLevels), "Length of levelToColor not equal to to the length of AllLevels")
 	for _, level := range AllLevels {
 		assert.NotEmpty(t, levelToColor[level], "Level %v not covered by a color in levelToColor", level)
 		assert.NotEmpty(t, levelToLowercaseString[level], "Level %v not covered in levelToLowercaseString", level)
 		assert.NotEmpty(t, levelToCapitalString[level], "Level %v not covered in levelToCapitalString", level)
-		assert.NotEmpty(t, levelToLowercaseColorString[level], "Level %v not covered by a color in levelToLowercaseColorString", level)
-		assert.NotEmpty(t, levelToCapitalColorString[level], "Level %v not covered by a color in levelToCapitalColorString", level)
+		assert.NotEmpty(t, levelToLowercaseColorString[level], "Level %v not covered levelToLowercaseColorString", level)
+		assert.NotEmpty(t, levelToCapitalColorString[level], "Level %v not covered in levelToCapitalColorString", level)
 	}
 }
